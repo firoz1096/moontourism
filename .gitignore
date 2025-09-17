@@ -1,6 +1,9 @@
 # Node modules
 node_modules/
 
+# Environment variables
+.env
+
 # Logs
 logs
 *.log
@@ -14,21 +17,17 @@ pids
 *.seed
 *.pid.lock
 
-# Environment variables
-.env
+# Coverage
+coverage/
 
 # Build output
 dist/
 build/
 
-# Coverage
-coverage/
-
-# OS files
+# OS generated files
 .DS_Store
 Thumbs.db
 
 # IDE / Editor folders
 .vscode/
 .idea/
-
