@@ -8,24 +8,48 @@ const router = express.Router();
 // Register API
 router.post("/register", async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, email, password } = req.body;
 
-    // Check user exists
-    const existingUser = await User.findOne({ username });
-    if (existingUser) return res.status(400).json({ message: "User already exists" });
+    // Validate input
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: "Username, email, and password are required" });
+    }
+
+    // Check if username or email already exists
+    const existingUser = await User.findOne({
+      $or: [{ username }, { email }],
+    });
+
+    if (existingUser) {
+      if (existingUser.username === username) {
+        return res.status(400).json({ message: "Username already exists" });
+      } else if (existingUser.email === email) {
+        return res.status(400).json({ message: "Email already exists" });
+      }
+    }
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Save user
-    const newUser = new User({ username, password: hashedPassword });
+    const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
 
-    res.json({ message: "User registered successfully" });
+    res.status(201).json({ message: "User registered successfully", userId: newUser._id });
   } catch (error) {
-    res.status(500).json({ message: "Error registering user" });
+    console.error("Register error:", error);
+
+    // Handle duplicate key errors just in case
+    if (error.code === 11000) {
+      const dupField = Object.keys(error.keyPattern)[0];
+      return res.status(400).json({ message: `${dupField} already exists` });
+    }
+
+    res.status(500).json({ message: error.message || "Error registering user" });
   }
 });
+
+
 
 // Login API
 router.post("/login", async (req, res) => {

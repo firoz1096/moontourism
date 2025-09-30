@@ -34,7 +34,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-
+//get a deal by id
 router.get("/:id", async (req, res) => {
   try {
     const deal = await PostFlightDealSchema.findById(req.params.id);
@@ -47,6 +47,40 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+
+// Update a deal
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedDeal = await PostFlightDealSchema.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true } // return updated doc
+    );
+    if (!updatedDeal) {
+      return res.status(404).json({ error: "Deal not found" });
+    }
+    res.status(200).json(updatedDeal);
+  } catch (error) {
+    console.error("Error updating deal:", error);
+    res.status(500).json({ error: "Server error while updating deal" });
+  }
+});
+
+// Delete a deal
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedDeal = await PostFlightDealSchema.findByIdAndDelete(id);
+    if (!deletedDeal) {
+      return res.status(404).json({ error: "Deal not found" });
+    }
+    res.status(200).json({ message: "Deal deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting deal:", error);
+    res.status(500).json({ error: "Server error while deleting deal" });
+  }
+});
 
 
 

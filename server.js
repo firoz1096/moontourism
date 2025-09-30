@@ -119,6 +119,28 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message });
 });
 
+
+
+//If someone tries to call your API directly from another domain, they’ll get a CORS error 🚫.
+const allowedOrigins = [
+  "http://localhost:3000",             // for local dev
+  "https://moontourism.netlify.app"    // your Netlify site
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
+
 // ================== START SERVER ==================
 app.listen(port, () => {
   console.log(`🚀 Server running on port ${port}`);
