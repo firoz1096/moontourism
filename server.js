@@ -10,6 +10,7 @@ const { v4: uuidv4 } = require("uuid");
 const flightEnquiryRoutes = require("./routes/flightEnquiryRoutes");
 const hotelEnquiryRoutes = require("./routes/hotelEnquiryRoutes");
 const holidayEnquiryRoutes = require("./routes/holidayEnquiryRoutes"); //for hioliday and umrah enquiry form using same model/route
+const visaEnquiryRoutes = require("./routes/visaEnquiryRoutes");
 const flightDealsRoutes = require("./routes/flightDealsRoutes");
 const roundTripDealsRoutes = require("./routes/roundTripDealsRoutes");
 const holidayDealsRoutes = require("./routes/holidayDealsRoutes");
@@ -22,7 +23,8 @@ const termRoutes = require("./routes/termRoutes");
 const aboutRoutes = require("./routes/aboutRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const blogRoutes = require("./routes/blogRoutes");
-
+const visaInfoRoutes = require("./routes/visaInfoRoutes");
+const visaTypeRoutes = require("./routes/visaTypeRoutes");
 
 // Initialize app
 const app = express();
@@ -42,6 +44,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 app.use("/api/auth", authRoutes);
 app.use("/api/flight-enquiry", flightEnquiryRoutes);
 app.use("/api/holiday-enquiry", holidayEnquiryRoutes);
+app.use("/api/visa-enquiry", visaEnquiryRoutes);
 app.use("/api/hotel-enquiry", hotelEnquiryRoutes);
 app.use("/api/flight-deals", flightDealsRoutes);
 app.use("/api/umrah-deals", umrahDealsRoutes);
@@ -54,6 +57,8 @@ app.use("/api", termRoutes);
 app.use("/api", aboutRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", blogRoutes);
+app.use("/api/visa-info-country", visaInfoRoutes);
+app.use("/api/visa-type", visaTypeRoutes);
 
 
 // ================== MULTER CONFIG ==================
