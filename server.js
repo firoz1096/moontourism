@@ -25,6 +25,7 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const blogRoutes = require("./routes/blogRoutes");
 const visaInfoRoutes = require("./routes/visaInfoRoutes");
 const visaTypeRoutes = require("./routes/visaTypeRoutes");
+const callRequestRoutes  = require("./routes/callRequestRoutes");
 
 // Initialize app
 const app = express();
@@ -59,6 +60,8 @@ app.use("/api", categoryRoutes);
 app.use("/api", blogRoutes);
 app.use("/api/visa-info-country", visaInfoRoutes);
 app.use("/api/visa-type", visaTypeRoutes);
+app.use("/api/call-request", callRequestRoutes);
+
 
 
 // ================== MULTER CONFIG ==================
