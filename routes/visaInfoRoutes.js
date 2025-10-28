@@ -120,6 +120,41 @@ router.get("/", async (req, res) => {
 
 
 
+// GET visa info by ID
+router.get("/id/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const visaInfo = await PostVisaInfo.findById(id);
+    if (!visaInfo) {
+      return res.status(404).json({ success: false, message: "Visa info not found" });
+    }
+
+    const visaTypes = await PostVisaType.find({ visaInfoId: visaInfo._id });
+
+    res.status(200).json({
+      success: true,
+      data: {
+        country: visaInfo.country,
+        visaInfo: {
+          _id: visaInfo._id,
+          thumbnail: visaInfo.thumbnail,
+          region: visaInfo.region,
+          visaSampleCopy: visaInfo.visaSampleCopy,
+          documentsRequired: visaInfo.documentsRequired,
+          faqs: visaInfo.faqs,
+        },
+        // visaTypes,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching visa info by ID:", error);
+    res.status(500).json({ success: false, error: "Server error fetching visa info" });
+  }
+});
+
+
+
 // ================== PUT /api/visa-info/:id ==================
 // Update visa info by ID
 router.put("/:id", async (req, res) => {
